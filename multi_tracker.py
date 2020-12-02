@@ -74,12 +74,6 @@ flag=0
 blue_dR = 0
 blue_perc_area  =0
 
-blue_x = 0
-blue_y = 0 
-green_x = 0
-green_y = 0
-blue_R = 0
-green_R = 0
 
 while True:
     if(args["url"]==True):
@@ -109,15 +103,12 @@ while True:
         area=cv2.contourArea(c)
         if area>800:
             ((x, y), radius) = cv2.minEnclosingCircle(c)
-            green_x = x
-            green_y = y
-            green_R = radius
             M = cv2.moments(c)
             center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
             if radius > 10:
                 flag = 1
-                cv2.circle(frame, (int(x), int(y)), int(radius),(0,100,0), 2)
-                cv2.circle(frame, center, 5, (0,100,0), -1)
+                cv2.circle(frame, (int(x), int(y)), int(radius),(113,179,60), 2)
+                cv2.circle(frame, center, 5, (113,179,60), -1)
     if flag ==1:           
         green_centers.appendleft(center)
         green_radii.appendleft(radius)
@@ -155,17 +146,12 @@ while True:
                 continue
             thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
             #print(green_centers[i])
-            cv2.line(frame, green_centers[i - 1], green_centers[i], (0,100,0),thickness)
-        cv2.putText(frame,"DIRECTION: {} ".format(green_direction) , (0, 30), cv2.FONT_HERSHEY_SIMPLEX,0.65, (0,100,0), 3)
+            cv2.line(frame, green_centers[i - 1], green_centers[i], (113,179,60),thickness)
+        cv2.putText(frame, green_direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,0.65, (0, 0, 255), 3)
         #cv2.putText(frame, " green_dR: {} green_dX : {}, green_dY: {}".format(green_dR, green_dX/10, green_dY/10),(frame.shape[1]- 800, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0, 0, 255), 2)
-        #cv2.putText(frame , "Coordinates x:{} y:{} ;  Radius:{} green_dR:{} ; green_dX :{} green_dY:{} ; Percentage Area: {}".format(int(x),int(y),int(radius),int(green_dR),green_dX/10, green_dY/10,float(green_perc_area)),(0, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0,100,0), 2)
-        cv2.putText(frame , "x:{} y:{} ".format(int(green_x),int(green_y)),(0, 70), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0,100,0), 2)
-        cv2.putText(frame , "dx:{} dy:{} ".format(int(green_dX),int(green_dY)),(0, 110), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0,100,0), 2)
-         #Radius:{} blue_dR:{} ; blue_dX :{} blue_dY:{} ; Percentage Area: {}".format(int(x),int(y),int(radius),int(blue_dR),blue_dX/10, blue_dY/10,float(blue_perc_area)),(0, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0, 0, 255), 2)
-        cv2.putText(frame , "Radius:{}  dR:{} ".format(int(green_R),int(green_dR)),(0, 150), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0,100,0), 2)
+        cv2.putText(frame , "Coordinates x:{} y:{} ;  Radius:{} green_dR:{} ; green_dX :{} green_dY:{} ; Percentage Area: {}".format(int(x),int(y),int(radius),int(green_dR),green_dX/10, green_dY/10,float(green_perc_area)),(0, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0, 0, 255), 2)
 
-        cv2.imshow("MASK GREEN",green)
-        
+        cv2.imshow("MASK green",green)
         cv2.imshow("Frame", frame)
       
 
@@ -182,9 +168,6 @@ while True:
         area=cv2.contourArea(c)
         if area>800:
             ((x, y), radius) = cv2.minEnclosingCircle(c)
-            blue_x = x
-            blue_y = y
-            blue_R = radius
             M = cv2.moments(c)
             center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
             if radius > 10:
@@ -229,23 +212,20 @@ while True:
             thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
             #print(blue_centers[i])
             cv2.line(frame, blue_centers[i - 1], blue_centers[i], (255,0,0),thickness)
-        cv2.putText(frame,"DIRECTION: {}".format(blue_direction), (900, 30), cv2.FONT_HERSHEY_SIMPLEX,0.65, (255, 0, 0), 3)
+        cv2.putText(frame, blue_direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,0.65, (0, 0, 255), 3)
         #cv2.putText(frame, " blue_dR: {} blue_dX : {}, blue_dY: {}".format(blue_dR, blue_dX/10, blue_dY/10),(frame.shape[1]- 800, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0, 0, 255), 2)
-        cv2.putText(frame , "x:{} y:{} ".format(int(blue_x),int(blue_y)),(900, 70), cv2.FONT_HERSHEY_SIMPLEX,0.75, (255,0,0), 2)
-        cv2.putText(frame , "dx:{} dy:{} ".format(int(blue_dX),int(blue_dY)),(900, 110), cv2.FONT_HERSHEY_SIMPLEX,0.75, (255,0,0), 2)
-        cv2.putText(frame , "Radius:{}  dR:{} ".format(int(blue_R),int(blue_dR)),(900, 150), cv2.FONT_HERSHEY_SIMPLEX,0.75, (255,0,0), 2)
-         #Radius:{} blue_dR:{} ; blue_dX :{} blue_dY:{} ; Percentage Area: {}".format(int(x),int(y),int(radius),int(blue_dR),blue_dX/10, blue_dY/10,float(blue_perc_area)),(0, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0, 0, 255), 2)
+        cv2.putText(frame , "Coordinates x:{} y:{} ;  Radius:{} blue_dR:{} ; blue_dX :{} blue_dY:{} ; Percentage Area: {}".format(int(x),int(y),int(radius),int(blue_dR),blue_dX/10, blue_dY/10,float(blue_perc_area)),(0, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0, 0, 255), 2)
 
-        cv2.imshow("MASK BLUE",blue)
+        cv2.imshow("MASK blue",blue)
         cv2.imshow("Frame", frame)
 
 
 
 
         
-        key = cv2.waitKey(1) & 0xFF
-        if key == ord("q"):
-            break
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord("q"):
+        break
 
 green_centers[-10] 
 vs.stop()

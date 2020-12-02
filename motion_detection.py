@@ -148,8 +148,8 @@ while True:
         #cv2.putText(frame, " dR: {} dx : {}, dy: {}".format(dR, dX/10, dY/10),(frame.shape[1]- 800, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0, 0, 255), 2)
         cv2.putText(frame , "Coordinates x:{} y:{} ;  Radius:{} dR:{} ; dx :{} dy:{} ; Percentage Area: {}".format(int(x),int(y),int(radius),int(dR),dX/10, dY/10,float(perc_area)),(0, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,0.75, (0, 0, 255), 2)
 
-    cv2.imshow("MASK",limits)
-    cv2.imshow("Frame", frame)
+        cv2.imshow("MASK",limits)
+        cv2.imshow("Frame", frame)
       
         counter+=1
         key = cv2.waitKey(1) & 0xFF

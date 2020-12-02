@@ -18,6 +18,7 @@ cv2.createTrackbar('UV','Thresholds',255,255, nothing)
 
 while(1):
 	_, img = cap.read()
+	img=cv2.flip(img,1)  
 	    
 	#converting frame(img i.e BGR) to HSV (hue-saturation-value)
 
@@ -45,13 +46,12 @@ while(1):
 
 
 	color=cv2.dilate(color,kernal)
-           
-           
-    	cv2.imshow("Color",color)
-    	cv2.imshow("Original Image",img)	
+	cv2.imshow("Color",color)
+	cv2.imshow("Original Image",img)	
     	 
 	if cv2.waitKey(1)== ord('q'):
 		break
-
+print("LowerHSV: ",color_lower)
+print("UpperHSV: ",color_upper)
 cap.release()
 cv2.destroyAllWindows()

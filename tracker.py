@@ -6,9 +6,14 @@ from geometry_msgs.msg import Pose
 import sys
 import cv2
 import numpy as np 
+import time
+import urllib
+import imutils
+
+#URL = "http://192.168.1.8:8080/shot.jpg"
 
 rospy.init_node("track_colored_object")
-cap=cv2.VideoCapture(0)
+cap=cv2.VideoCapture(-1)
 
 x_d=0.0
 y_d=0.0
@@ -16,10 +21,17 @@ x_d_p=0.0
 y_d_p=0.0
 
 while(1):
+	#imgResp = urllib.urlopen(URL)
+	#print(type(imgResp))
+	#img_arr = np.array(bytearray(imgResp.read()),dtype=np.uint8)
+	#print(img_arr)
+
+	#img = cv2.imdecode(img_arr,1)
 	_, img1 = cap.read()
 	img=cv2.flip(img1,1)    
 	#converting frame(img i.e BGR) to HSV (hue-saturation-value)
-
+	#print(type(img))
+	img = imutils.resize(img, width=1200)
 	hsv=cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
 	blue_lower=np.array([94,123,162],np.uint8)
@@ -59,17 +71,20 @@ while(1):
 		if area>800: 
 			x,y,w,h = cv2.boundingRect(contour)	
 			#print(x,y,w,h,int(img.shape[0]))
-			lol=int(max(w,h))
+			lol=int(0.5*max(w,h))
+			f1 = int((2*x+w)/2)
+			f2 = int((2*y+h)/2)
+			#print(type(f1),type(f2),type(lol))
 			#img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-			img=cv2.circle(img,((2*x+w)/2,(2*y+h)/2),lol/2,(0,100,0),5)
-			img=cv2.circle(img,((2*x+w)/2,(2*y+h)/2),5,(0,0,255),-1)
-			img=cv2.line(img,(0,int(img.shape[0])),((2*x+w)/2,(2*y+h)/2),(0,255,0),2)
+			img=cv2.circle(img,(f1,f2),lol,(0,100,0),5)
+			img=cv2.circle(img,(f1,f2),5,(0,0,255),-1)
+			img=cv2.line(img,(0,int(img.shape[0])),(f1,f2),(0,255,0),2)
 		
 			x_d= x
 			y_d= int(img.shape[0]) - y - h
 
-			#x_d= (((2*y+h)/2)-0) * 0.06
-			#y_d= (((2*x+w)/2)-int(img.shape[0])) * 0.075
+			#x_d= ((f2)-0) * 0.06
+			#y_d= ((f1)-int(img.shape[0])) * 0.075
 			
 			s= 'x= ' + str(x_d)  + ',  y= ' + str(y_d)
 			cv2.putText(img,s,(x-20,y-5),cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0,0,255),2,cv2.LINE_AA)
@@ -88,17 +103,19 @@ while(1):
 		if area>800: 
 			x,y,w,h = cv2.boundingRect(contour)	
 			#print(x,y,w,h,int(img.shape[0]))
-			lol=int(max(w,h))
+			lol=int(0.5*max(w,h))
+			f1 = int((2*x+w)/2)
+			f2 = int((2*y+h)/2)
 			#img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-			img=cv2.circle(img,((2*x+w)/2,(2*y+h)/2),lol/2,(100,0,0),5)
-			img=cv2.circle(img,((2*x+w)/2,(2*y+h)/2),5,(0,0,255),-1)
-			img=cv2.line(img,(0,int(img.shape[0])),((2*x+w)/2,(2*y+h)/2),(0,255,0),2)
+			img=cv2.circle(img,(f1,f2),lol,(100,0,0),5)
+			img=cv2.circle(img,(f1,f2),5,(0,0,255),-1)
+			img=cv2.line(img,(0,int(img.shape[0])),(f1,f2),(0,255,0),2)
 		
 			x_d= x
 			y_d= int(img.shape[0]) - y - h
 
-			#x_d= (((2*y+h)/2)-0) * 0.06
-			#y_d= (((2*x+w)/2)-int(img.shape[0])) * 0.075
+			#x_d= ((f2)-0) * 0.06
+			#y_d= ((f1)-int(img.shape[0])) * 0.075
 			
 			s= 'x= ' + str(x_d)  + ',  y= ' + str(y_d)
 			cv2.putText(img,s,(x-20,y-5),cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0,0,255),2,cv2.LINE_AA)
@@ -116,17 +133,19 @@ while(1):
 		if area>800: 
 			x,y,w,h = cv2.boundingRect(contour)	
 			#print(x,y,w,h,int(img.shape[0]))
-			lol=int(max(w,h))
+			lol=int(0.5*max(w,h))
+			f1 = int((2*x+w)/2)
+			f2 = int((2*y+h)/2)
 			#img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-			img=cv2.circle(img,((2*x+w)/2,(2*y+h)/2),lol/2,(0,0,100),5)
-			img=cv2.circle(img,((2*x+w)/2,(2*y+h)/2),5,(0,0,255),-1)
-			img=cv2.line(img,(0,int(img.shape[0])),((2*x+w)/2,(2*y+h)/2),(0,255,0),2)
+			img=cv2.circle(img,(f1,f2),lol,(0,0,100),5)
+			img=cv2.circle(img,(f1,f2),5,(0,0,255),-1)
+			img=cv2.line(img,(0,int(img.shape[0])),(f1,f2),(0,255,0),2)
 		
 			x_d= x
 			y_d= int(img.shape[0]) - y - h
 
-			#x_d= (((2*y+h)/2)-0) * 0.06
-			#y_d= (((2*x+w)/2)-int(img.shape[0])) * 0.075
+			#x_d= ((f2)-0) * 0.06
+			#y_d= ((f1)-int(img.shape[0])) * 0.075
 			
 			s= 'x= ' + str(x_d)  + ',  y= ' + str(y_d)
 			cv2.putText(img,s,(x-20,y-5),cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0,0,255),2,cv2.LINE_AA)
@@ -143,5 +162,5 @@ while(1):
 	if cv2.waitKey(1)== ord('q'):
 		break
 
-cap.release()
+#cap.release()
 cv2.destroyAllWindows()
